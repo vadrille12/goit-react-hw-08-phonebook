@@ -19,6 +19,27 @@ export const FormField = styled.label`
   flex-direction: column;
   gap: 4px;
   margin-bottom: 20px;
+  text-align: left;
+  font-weight: 600;
+`;
+
+export const Field = styled(FormikField)`
+  font-size: 18px;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  background-color: transparent;
+  border: none;
+  border: 2px solid blue;
+
+  &:focus {
+    outline: none;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  }
+
+  &::placeholder {
+    font-size: 15px;
+  }
 `;
 
 export const FormButton = styled.button`
@@ -50,23 +71,4 @@ export const FormButton = styled.button`
 
 export const ErrorMessage = styled(Error)`
   color: red;
-`;
-
-export const Field = styled(FormikField)`
-  font-size: 18px;
-  padding: 10px 15px;
-  border-radius: 6px;
-  margin-bottom: 6px;
-  background-color: transparent;
-  border: none;
-  border: 2px solid blue;
-
-  &:focus {
-    outline: none;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  }
-
-  &::placeholder {
-    font-size: 15px;
-  }
 `;

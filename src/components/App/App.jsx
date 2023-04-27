@@ -1,36 +1,46 @@
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Route, Routes } from 'react-router-dom';
 
-import { selectError, selectIsLoading } from 'redux/selectors';
-import { fetchContacts } from 'redux/operations';
+import { refresh } from 'redux/auth/operations';
+import { selectIsRefreshing } from 'redux/auth/selectors';
 
-import { GlobalStyle } from 'components/GlobalStyle';
-import { Wrapper, HeroTitle, Title } from './App.styled';
-import { ContactsForm } from 'components/ContactsForm/ContactsForm';
-import { ContactsList } from 'components/ContactsList/ContactsList';
-import { Filter } from 'components/Filter/Filter';
+import { PublicRoute } from 'components/PublicRoute';
+import { PrivateRoute } from 'components/PrivateRoute';
+import { Layout } from 'components/Layout/Layout';
+
+const HomePage = lazy(() => import('../../pages/HomePage'));
+const ContactsPage = lazy(() => import('../../pages/ContactsPage'));
+const LoginPage = lazy(() => import('../../pages/LoginPage'));
+const RegisterPage = lazy(() => import('../../pages/RegisterPage'));
+const NotFoundPage = lazy(() => import('../../pages/NotFoundPage'));
 
 export function App() {
+  const IsRefreshing = useSelector(selectIsRefreshing);
   const dispatch = useDispatch();
-  const isLoading = useSelector(selectIsLoading);
-  const error = useSelector(selectError);
 
   useEffect(() => {
-    dispatch(fetchContacts());
+    dispatch(refresh());
   }, [dispatch]);
 
-  return (
-    <Wrapper>
-      <HeroTitle>Phonebook</HeroTitle>
-      <ContactsForm />
+  return IsRefreshing ? (
+    <b>Refreshing...</b>
+  ) : (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<HomePage />} />
 
-      <Title>Contacts</Title>
-      <Filter />
-      {isLoading && !error && <p>Request in progress...</p>}
-      {error && <p>{error}</p>}
-      <ContactsList />
+        <Route element={<PublicRoute />}>
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
+        </Route>
 
-      <GlobalStyle />
-    </Wrapper>
+        <Route element={<PrivateRoute />}>
+          <Route path="contacts" element={<ContactsPage />} />
+        </Route>
+
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
   );
 }
