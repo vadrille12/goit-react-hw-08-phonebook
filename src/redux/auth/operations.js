@@ -58,7 +58,7 @@ export const refresh = createAsyncThunk(
     }
     try {
       setToken(token);
-      const { data } = axios.get('/users/current');
+      const { data } = await axios.get('/users/current');
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
