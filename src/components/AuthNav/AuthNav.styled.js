@@ -10,6 +10,7 @@ export const StyledLink = styled(NavLink)`
   font-weight: 700;
   border-radius: 15px;
   color: #000;
+
   &.active,
   &:hover {
     font-weight: bold;
